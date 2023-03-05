@@ -16,6 +16,9 @@ const PORT = process.env.PORT;
 app.get("/", (req, res, next) => {
     res.send("The get method")
 })
+// Express - Body Middleware
+
+app.use(express.json())
 
 app.use("/api", router)
 
