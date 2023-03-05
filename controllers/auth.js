@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const CustomError=require("../helpers/error/CustomError")
 
 const register = async (req, res, next) => {
     try {
@@ -21,15 +22,18 @@ const register = async (req, res, next) => {
             })
     }
     catch(err){
-        return next(err)
+        return next(new Error(err))
     }
 }
 
-// const err = () => {
-//     throw new Error("Throwed an error");
-// }
+const err = (req, res, next) => {
+    // return next(new CustomError("Throwed an error", 400));
+    // return next(SyntaxError("Syntax Error"))
+    return next(TypeError("Type Error"))
+
+}
 
 module.exports = ({
-    register
-    // err
+    register,
+    err
 });
