@@ -13,6 +13,9 @@ const errorHandler=(err, req, res, next)=>{
         // Dublicate Key
         customError=new CustomError("Dublicate Key Found: Check Your Input", 400)
     }
+    if(err.name==="CastError"){
+        customError=new CustomError("Please provide a valid ID.", 400);
+    }
     res
     .status(customError.status || 500)
     .json({ 
