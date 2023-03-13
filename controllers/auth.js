@@ -4,6 +4,7 @@ const asyncErrorWrapper = require("express-async-handler")
 const {sendJwtToClient}=require("../helpers/authorization/tokenHelpers");
 const {validateUserInput, comparePassword} = require("../helpers/input/inputHelpers");
 const sendEmail = require("../helpers/libraries/sendEmail");
+const { findByIdAndUpdate } = require("../models/user");
 
 
 const register = asyncErrorWrapper(async (req, res, next) => {
@@ -41,7 +42,6 @@ const login=asyncErrorWrapper(async (req, res, next)=>{
         return next(new CustomError("Please check email or password!", 400))
     }
     const user=await User.findOne({email}).select("+password");
-    console.log(user)
     
     if(!comparePassword(password, user.password)){
         return next(new CustomError("Please check your credentials", 400))
@@ -147,7 +147,23 @@ const resetPassword = asyncErrorWrapper(async (req, res, next)=>{
         success:true, 
         message:"Reset password procees successfull"
     })
-})
+});
+
+const editDetails=asyncErrorWrapper(async (req, res, next)=>{
+    const editInfo=req.body;
+
+    const user=await User.findByIdAndUpdate(req.user.id, editInfo, {
+        new:true,
+        runValidators:true
+    });
+
+    return res.status(200)
+    .json({
+        success:true,
+        message:"Update Operation Successfull",
+        data:user
+    })
+});
 module.exports = ({
     register,
     getUser,
@@ -155,5 +171,6 @@ module.exports = ({
     logout,
     imageUpload,
     forgotPassword,
-    resetPassword 
+    resetPassword ,
+    editDetails
 });

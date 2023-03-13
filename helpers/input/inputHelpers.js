@@ -7,5 +7,5 @@ const comparePassword=(password, hashedPassword)=>{
 }
 module.exports={
     validateUserInput,
-     comparePassword
+    comparePassword
 };
