@@ -24,7 +24,13 @@ const QuestionSchema=new Schema({
         type:mongoose.Schema.ObjectId,
         required:true,
         ref:"user"
-    }
+    },
+    likes:[
+        {
+            type:mongoose.Schema.ObjectId,
+            ref:"user"
+        }
+    ]
 });
 
 QuestionSchema.pre("save", function(next){
