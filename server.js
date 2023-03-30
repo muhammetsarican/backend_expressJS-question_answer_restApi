@@ -15,7 +15,11 @@ dotenv.config({
 const PORT = process.env.PORT;
 
 app.get("/", (req, res, next) => {
-    res.send("The get method")
+    res.status(200)
+    .json({
+        success:true,
+        message:"Welcome To ExpressJs"
+    })
 })
 // Express - Body Middleware
 

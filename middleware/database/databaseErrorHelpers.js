@@ -2,6 +2,7 @@ const CustomError = require('../../helpers/error/CustomError');
 const User=require('../../models/user');
 const asyncErrorWrapper=require('express-async-handler');
 const Question=require("../../models/question");
+const Answer = require('../../models/answer');
 
 const checkUserExists = asyncErrorWrapper(async(req, res, next)=>{
     const {id}=req.params;
@@ -15,9 +16,9 @@ const checkUserExists = asyncErrorWrapper(async(req, res, next)=>{
     next();
 });
 const checkQuestionExist=asyncErrorWrapper(async(req, res, next)=>{
-    const {id}=req.params;
+    const question_id=req.params.id || req.params.question_id;
 
-    const question=await Question.findById(id);
+    const question=await Question.findById(question_id);
     
 
     if(!question){
@@ -25,8 +26,23 @@ const checkQuestionExist=asyncErrorWrapper(async(req, res, next)=>{
     }
     next();
 });
+const checkQuestionAndAnswerExist=asyncErrorWrapper(async(req, res, next)=>{
+    const question_id=req.params.id || req.params.question_id;
+    const answer_id=req.params.answer_id;
+
+    const answer=await Answer.findOne({
+        _id:answer_id,
+        question:question_id
+    });
+
+    if(!answer){
+        return next(new CustomError("There is no answer with that id associated with question id", 400));
+    }
+    next();
+});
 
 module.exports={
     checkUserExists,
-    checkQuestionExist
+    checkQuestionExist,
+    checkQuestionAndAnswerExist
 };

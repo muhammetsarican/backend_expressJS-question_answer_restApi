@@ -4,6 +4,7 @@ const {isTokenIncluded, getAccessTokenFromHeader}=require("../../helpers/authori
 const asyncErrorWrapper=require("express-async-handler");
 const User=require("../../models/user")
 const Question=require("../../models/question")
+const Answer=require("../../models/answer")
 
 
 const getAccessToRoute=(req, res, next)=>{
@@ -52,9 +53,22 @@ const getQuestionOwnerAccess=asyncErrorWrapper(async(req, res, next)=>{
         return next(new CustomError("Only owner can handle this operation", 403));
     }
     next();
+});
+const getAnswerOwnerAccess=asyncErrorWrapper(async(req, res, next)=>{
+    const user_id=req.user.id;
+    const answer_id=req.params.answer_id;
+
+    const answer= await Answer.findById(answer_id);
+
+    if(answer.user!=user_id){
+        return next(new CustomError("Only owner can handle this operation", 403));
+    }
+    next();
 })
+
 module.exports={
     getAccessToRoute,
     getAdminAccess,
-    getQuestionOwnerAccess
+    getQuestionOwnerAccess,
+    getAnswerOwnerAccess
 }

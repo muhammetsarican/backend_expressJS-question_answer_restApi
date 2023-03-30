@@ -30,6 +30,12 @@ const QuestionSchema=new Schema({
             type:mongoose.Schema.ObjectId,
             ref:"user"
         }
+    ],
+    answers:[
+        {
+            type:mongoose.Schema.ObjectId,
+            ref:"answer"
+        }
     ]
 });
 
