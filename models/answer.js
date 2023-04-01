@@ -1,5 +1,6 @@
 const mongoose=require("mongoose");
 const Question = require("./question");
+const User=require("./user");
 
 const Schema=mongoose.Schema;
 
@@ -15,16 +16,16 @@ const AnswerSchema=Schema({
     },
     likes:[{
         type:mongoose.Schema.ObjectId,
-        ref:"user"
+        ref:"User"
     }],
     user:{
         type:mongoose.Schema.ObjectId,
-        ref:"user",
+        ref:"User",
         required:true
     },
     question:{
         type:mongoose.Schema.ObjectId,
-        ref:"question",
+        ref:"Question",
         required:true
     }
 })
@@ -36,6 +37,7 @@ AnswerSchema.pre("save", async function(next){
         const question=await Question.findById(this.question);
 
         question.answers.push(this._id);
+        question.answerCount=question.answers.length;
     
         await question.save();
         next();

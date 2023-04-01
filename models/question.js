@@ -1,5 +1,7 @@
 const mongoose=require("mongoose");
 const slugify=require("slugify");
+const User= require("./user")
+const Answer=require("./answer")
 
 const Schema=mongoose.Schema;
 
@@ -23,18 +25,26 @@ const QuestionSchema=new Schema({
     user:{
         type:mongoose.Schema.ObjectId,
         required:true,
-        ref:"user"
+        ref:"User"
+    },
+    likeCount:{
+        type:Number,
+        default:0
     },
     likes:[
         {
             type:mongoose.Schema.ObjectId,
-            ref:"user"
+            ref:"User"
         }
     ],
+    answerCount:{
+        type:Number,
+        default:0
+    },
     answers:[
         {
             type:mongoose.Schema.ObjectId,
-            ref:"answer"
+            ref:"Answer"
         }
     ]
 });
